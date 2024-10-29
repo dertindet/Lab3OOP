@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>acbfbab3-f3ee-484f-8919-19b9be9b8419</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>menu.py</StartupFile>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -23,6 +23,15 @@
   <ItemGroup>
     <Compile Include="menu.py" />
     <Compile Include="composition.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="main.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="file_handler.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="user_interface.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="song.py">

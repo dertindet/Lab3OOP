@@ -17,7 +17,7 @@ public:
     void saveToFile(const std::string& filename) const;
     void loadCollectionFromFile(const std::string& filename);
     const std::vector<Composition*>& getCompositions() const;
-    void removeComposition(size_t index);
+    bool removeComposition(size_t index);
 };
 
 #endif
