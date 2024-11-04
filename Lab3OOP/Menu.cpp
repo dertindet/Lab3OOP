@@ -4,21 +4,19 @@
 #include <iostream>
 #include <iomanip>
 #include <set>
+#include "FileHandler.h"
 
 
 Menu::Menu() {
-    collection.loadCollectionFromFile("favorites.txt");
+    fileHandler.loadFromFile(collection, "favorites.txt");
 }
 
 void Menu::showMainMenu() {
     int choice;
     do {
-        std::cout << "1. Add composition\n";
-        std::cout << "2. Show favorite compositions\n";
-        std::cout << "3. Remove composition\n"; 
-        std::cout << "4. Exit\n";
-        std::cout << "Select an option: ";
-        std::cin >> choice;
+        ui.displayMenu();
+        choice = ui.getChoice();
+
 
         switch (choice) {
         case 1:
@@ -31,108 +29,77 @@ void Menu::showMainMenu() {
             removeCompositionMenu();
             break;
         case 4:
-            collection.saveToFile("favorites.txt");
-            std::cout << "Exiting...\n";
+            showAllCompositions(); 
+            break;
+        case 5:
+            fileHandler.saveToFile(collection, "favorites.txt");
+            ui.displayMessage("Exiting...");
             break;
         default:
-            std::cout << "Wrong choice. Try again.\n";
+            ui.displayMessage("Wrong choice. Try again.");
         }
-    } while (choice != 4);
+    } while (choice != 5);
 }
 
 void Menu::addCompositionMenu() {
 tryAgain:
-    std::string title, vocalist, composer;
+    std::string title, detail;
     int duration, typeChoice;
 
-    std::cout << "\n1. Song\n";
-    std::cout << "2. Instrumental Work\n";
-    std::cout << "Select the type of composition: ";
-    std::cin >> typeChoice;
+    ui.displayMessage("\n1. Song\n2. Instrumental Work\nSelect the type of composition: ");
+    typeChoice = ui.getChoice();
 
     if (typeChoice == 1) {
-        std::cout << "\nEnter name: ";
-        std::cin >> title;
-        std::cout << "Enter duration (in seconds): ";
-        std::cin >> duration;
-        std::cout << "Enter the name of the vocalist: ";
-        std::cin >> vocalist;
-        collection.addComposition(new Song(title, duration, vocalist));
+        ui.getCompositionDetails(title, duration, detail, true);
+        collection.addComposition(new Song(title, duration, detail));
     }
     else if (typeChoice == 2) {
-        std::cout << "\nEnter name: ";
-        std::cin >> title;
-        std::cout << "Enter duration (in seconds): ";
-        std::cin >> duration;
-        std::cout << "Enter the name of the composer: "; 
-        std::cin >> composer;
-        collection.addComposition(new InstrumentalWork(title, duration, composer));
+        ui.getCompositionDetails(title, duration, detail, false);
+        collection.addComposition(new InstrumentalWork(title, duration, detail));
     }
     else {
-        std::cout << "Enter 1 or 2";
+        ui.displayMessage("Invalid choice. Enter 1 or 2.");
         goto tryAgain;
     }
 }
 void Menu::removeCompositionMenu() {
-    int index;
-    for (size_t i = 0; i < collection.getCompositions().size(); ++i) {
-        std::cout << std::setw(2) << i + 1 << ". "
-            << collection.getCompositions()[i]->getTitle()
-            << " (" << collection.getCompositions()[i]->getDuration() << " sec)\n";
+    int index = ui.displayCompositionListAndGetChoice(collection.getCompositions());
+    if (index > 0 && static_cast<size_t>(index) <= collection.getCompositions().size()) {
+        collection.removeComposition(index - 1);
     }
-    std::cout << "Enter the index of the composition to remove (0 to cancel): ";
-    std::cin >> index;
-    if (index > 0) {
-        collection.removeComposition(index - 1); 
+    else if (index != 0) {
+        ui.displayMessage("Invalid index. No composition removed.");
     }
 }
 
 void Menu::showFavoriteCompositionsMenu() {
-    std::cout << "\n=== Choose Favorite Compositions ===\n";
-
-    std::set<size_t> chosen; 
-    int choice = 0;
-
+    ui.displayMessage("\n=== Choose Favorite Compositions ===\n");
+    std::set<size_t> chosen;
+    int choice;
     do {
-        std::cout << "Enter the number of the composition to toggle selection (0 to finish):\n";
-
-        for (size_t i = 0; i < collection.getCompositions().size(); ++i) {
-            if (chosen.count(i)) {
-                std::cout << "* ";
-            }
-            else {
-                std::cout << "  ";
-            }
-            std::cout << std::setw(2) << i + 1 << ". "
-                << collection.getCompositions()[i]->getTitle()
-                << " (" << collection.getCompositions()[i]->getDuration() << " sec)\n";
-        }
-
-        std::cin >> choice;
+        ui.displayCompositionList(collection.getCompositions(), chosen);
+        choice = ui.getChoice();
 
         if (choice > 0 && static_cast<size_t>(choice) <= collection.getCompositions().size()) {
             if (chosen.count(choice - 1)) {
-                chosen.erase(choice - 1); 
+                chosen.erase(choice - 1);
             }
             else {
-                chosen.insert(choice - 1); 
+                chosen.insert(choice - 1);
             }
         }
         else if (choice != 0) {
-            std::cout << "Invalid choice. Please try again.\n";
+            ui.displayMessage("Invalid choice. Please try again.");
         }
     } while (choice != 0);
 
-    int totalDuration = 0;
-    for (auto index : chosen) {
-        totalDuration += collection.getCompositions()[index]->getDuration();
-    }
-    std::cout << "\nTotal listening time for selected compositions: " << totalDuration << " seconds.\n";
+    ui.displayFavoritesSummary(chosen, collection.getCompositions());
+}
 
-    for (auto index : chosen) {
-        if (const Song* song = dynamic_cast<const Song*>(collection.getCompositions()[index])) {
-            std::cout << "Vocalist: " << song->getVocalist() << std::endl;
-        }
+void Menu::showAllCompositions() {
+    ui.displayMessage("\n=== All Compositions ===\n");
+    for (const auto& composition : collection.getCompositions()) {
+        composition->show();
     }
     std::cout << "\n";
 }

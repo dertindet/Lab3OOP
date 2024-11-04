@@ -134,8 +134,12 @@
     <ClCompile Include="InstrumentalWork.cpp" />
     <ClCompile Include="MusicCollection.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="FileHandler.cpp" />
+    <ClCompile Include="UserInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FileHandler.h" />
+    <ClInclude Include="UserInterface.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Composition.h" />
     <ClInclude Include="InstrumentalWork.h" />

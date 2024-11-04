@@ -7,3 +7,5 @@ class Song(Composition):
 
     def get_vocalist(self) -> str:
         return self.vocalist
+    def show(self):
+        print(f"Title: {self.title}, Duration: {self.duration} sec, Vocalist: {self.vocalist}")
