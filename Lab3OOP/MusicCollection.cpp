@@ -30,29 +30,3 @@ bool MusicCollection::removeComposition(size_t index) {
     }
     return false; 
 }
-
-    std::string type;
-    while (std::getline(file, type)) {
-        std::string title;
-        int duration;
-
-
-        std::getline(file, title);
-        file >> duration;
-        file.ignore();  
-
-        if (type == "Song") {
-            std::string vocalist;
-            std::getline(file, vocalist);
-            compositions.push_back(new Song(title, duration, vocalist));
-        }
-        else if (type == "InstrumentalWork") {
-            std::string composer;
-            std::getline(file, composer);
-            compositions.push_back(new InstrumentalWork(title, duration, composer));
-        }
-    }
-
-    file.close();
-    std::cout << "Data successfully loaded from file: " << filename << std::endl << std::endl;
-}

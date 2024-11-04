@@ -95,7 +95,6 @@ void Menu::showFavoriteCompositionsMenu() {
 
     ui.displayFavoritesSummary(chosen, collection.getCompositions());
 }
-    std::cout << "\nTotal listening time for selected compositions: " << totalDuration << " seconds.\n";
 
 void Menu::showAllCompositions() {
     ui.displayMessage("\n=== All Compositions ===\n");
