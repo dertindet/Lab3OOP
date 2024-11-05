@@ -36,9 +36,6 @@ class Menu:
             self.ui.display_message("\n1. Song\n2. Instrumental Work\nSelect the type of composition: ")
             type_choice = self.ui.get_choice()
 
-            title = input("Enter name: ")
-            duration = int(input("Enter duration (in seconds): "))
-
             if type_choice == 1:
                 title, duration, vocalist = self.ui.get_composition_details(True)
                 self.collection.add_composition(Song(title, duration, vocalist))
