@@ -34,6 +34,10 @@ class UserInterface:
     def get_composition_details(self, is_song):
         title = input("Enter name: ")
         duration = int(input("Enter duration (in seconds): "))
-        detail = input("Enter the name of the vocalist or composer: ")
+        if is_song == True:
+            print("Enter the name of the vocalist: ")
+        else:
+            print("Enter the name of the composer: ")
+        detail = input()
         return title, duration, detail
 
