@@ -1,6 +1,7 @@
 from song import Song
 from instrumental_work import InstrumentalWork
 from music_collection import MusicCollection
+import sys
 
 class FileHandler:
     def load_collection_from_file(self, filename: str):
@@ -21,15 +22,18 @@ class FileHandler:
                         collection.add_composition(InstrumentalWork(title, duration, composer))
             print(f"Data successfully loaded from file: {filename}\n")
         except FileNotFoundError:
-            print(f"Could not open file for reading: {filename}")
+            print(f"Could not open file for reading: {filename}", file=sys.stderr)
         return collection
 
     def save_to_file(self, collection: MusicCollection, filename: str):
-        with open(filename, 'w') as file:
-            for comp in collection.get_compositions():
-                if isinstance(comp, Song):
-                    file.write(f"Song\n{comp.get_title()}\n{comp.get_duration()}\n{comp.get_vocalist()}\n")
-                elif isinstance(comp, InstrumentalWork):
-                    file.write(f"InstrumentalWork\n{comp.get_title()}\n{comp.get_duration()}\n{comp.get_composer()}\n")
-        print(f"Compositions successfully saved to file: {filename}\n")
+        try:
+            with open(filename, 'w') as file:
+                for comp in collection.get_compositions():
+                    if isinstance(comp, Song):
+                        file.write(f"Song\n{comp.get_title()}\n{comp.get_duration()}\n{comp.get_vocalist()}\n")
+                    elif isinstance(comp, InstrumentalWork):
+                        file.write(f"InstrumentalWork\n{comp.get_title()}\n{comp.get_duration()}\n{comp.get_composer()}\n")
+            print(f"Compositions successfully saved to file: {filename}\n")
+        except FileNotFoundError:
+            print(f"Could not open file for save: {filename}", file=sys.stderr)
 

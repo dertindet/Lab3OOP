@@ -10,7 +10,7 @@ private:
 
 public:
     Song(const std::string& title, int duration, const std::string& vocalist);
-    void show() const override;
+    std::string show() const override;
 
     std::string getVocalist() const;
 };

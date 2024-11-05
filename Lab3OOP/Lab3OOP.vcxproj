@@ -24,7 +24,7 @@
     <ProjectGuid>{7e2b38d5-a78b-4665-90ec-dd870ab6b2dc}</ProjectGuid>
     <RootNamespace>Lab3OOP</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Lab3_oop_c++</ProjectName>
+    <ProjectName>Lab4_oop_c++</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -135,6 +135,7 @@
     <ClCompile Include="MusicCollection.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="FileHandler.cpp" />
+    <ClCompile Include="AppException.cpp" />
     <ClCompile Include="UserInterface.cpp" />
   </ItemGroup>
   <ItemGroup>

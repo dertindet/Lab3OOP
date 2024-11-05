@@ -14,6 +14,8 @@ public:
     int getChoice();
     void getCompositionDetails(std::string& title, int& duration, std::string& detail, bool isSong);
     void displayFavoritesSummary(const std::set<size_t>& chosen, const std::vector<Composition*>& compositions);
+    void displayError(const std::string& errorMessage)  const;
+    void exceptionMessage(const std::exception& e);
 };
 
 #endif

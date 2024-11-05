@@ -9,5 +9,5 @@ class Composition:
     def get_duration(self) -> int:
         return self.duration
     def show(self):
-        print(f"Title: {self.title}, Duration: {self.duration} sec")
+        return((f"Title: {self.title}, Duration: {self.duration} sec"))
 

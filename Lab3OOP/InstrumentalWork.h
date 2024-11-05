@@ -8,7 +8,7 @@ private:
     std::string composer;
 public:
     InstrumentalWork(const std::string& title, int duration, const std::string& composer);
-    void show() const override;
+    std::string show() const override;
 
     std::string getComposer() const;
 };

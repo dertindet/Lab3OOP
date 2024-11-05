@@ -1,10 +1,13 @@
 #include "InstrumentalWork.h"
 #include <iostream>
+#include <sstream>
 
 InstrumentalWork::InstrumentalWork(const std::string& title, int duration, const std::string& composer) : Composition(title, duration), composer(composer) {}
 
-void InstrumentalWork::show() const {
-    std::cout << "Title: " << title << ", Duration: " << duration << " sec, Composer: " << composer << std::endl;
+std::string InstrumentalWork::show() const {
+    std::ostringstream oss;
+    oss << "Title: " << title << ", Duration: " << duration << " sec, Composer: " << composer;
+    return oss.str();
 }
 
 std::string InstrumentalWork::getComposer() const {

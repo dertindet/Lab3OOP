@@ -18,19 +18,39 @@ void UserInterface::displayMenu() {
 
 int UserInterface::displayCompositionListAndGetChoice(const std::vector<Composition*>& compositions) {
     int choice;
+tryAgain:
     for (size_t i = 0; i < compositions.size(); ++i) {
         std::cout << std::setw(2) << i + 1 << ". "
             << compositions[i]->getTitle()
             << " (" << compositions[i]->getDuration() << " sec)\n";
     }
     std::cout << "Enter the index of the composition to remove (0 to cancel): ";
-    std::cin >> choice;
+    while (true) {
+        std::cin >> choice;
+
+        
+        if (std::cin.fail()) {
+            std::cin.clear(); 
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+            std::cerr << "Error: Invalid input. Please enter a valid number." << std::endl << std::endl;
+            goto tryAgain;
+        }
+        else {
+            break;  
+        }
+    }
     return choice;
 }
 
 int UserInterface::getChoice() {
     int choice;
     std::cin >> choice;
+    if (std::cin.fail()) {
+        std::cin.clear();  
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+        displayError("Invalid input. Please enter a valid number.");
+        return -1;  
+    }
     return choice;
 }
 void UserInterface::displayCompositionList(const std::vector<Composition*>& compositions, const std::set<size_t>& chosen) {
@@ -59,15 +79,36 @@ void UserInterface::displayFavoritesSummary(const std::set<size_t>& chosen, cons
     std::cout << std::endl;
 }
 void UserInterface::getCompositionDetails(std::string& title, int& duration, std::string& detail, bool isSong) {
-    std::cout << "\nEnter name: ";
+    std::cout << "Enter name: ";
     std::cin >> title;
-    std::cout << "Enter duration (in seconds): ";
-    std::cin >> duration;
+
+
+    while (true) {
+        std::cout << "Enter duration (in seconds): ";
+        std::cin >> duration;  
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  
+            std::cout << "Invalid input. Please enter a number for the duration." << std::endl;
+        }
+        else {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            break;
+        }
+    }
+
     if (isSong) {
         std::cout << "Enter the name of the vocalist: ";
     }
     else {
         std::cout << "Enter the name of the composer: ";
     }
-    std::cin >> detail;
+    std::getline(std::cin, detail);  
+}
+
+void UserInterface::displayError(const std::string& errorMessage)  const {
+    std::cerr << "Error: " << errorMessage << std::endl;
+}
+void UserInterface::exceptionMessage(const std::exception& e) {
+    std::cerr << e.what() << std::endl;  
 }
