@@ -52,31 +52,33 @@ void Menu::showMainMenu() {
 
 
 void Menu::addCompositionMenu() {
-tryAgain:
     std::string title, detail;
     int duration, typeChoice;
 
-    ui.displayMessage("\n1. Song\n2. Instrumental Work\nSelect the type of composition: ");
-    typeChoice = ui.getChoice();
-    if (typeChoice == -1) {
-        goto tryAgain;
+    while (true) {  
+        ui.displayMessage("\n1. Song\n2. Instrumental Work\nSelect the type of composition: ");
+        typeChoice = ui.getChoice();
+
+        try {
+            if (typeChoice == -1) {
+                continue;  
+            }
+            if (typeChoice == 1) {
+                ui.getCompositionDetails(title, duration, detail, true);
+                collection.addComposition(new Song(title, duration, detail));
+            }
+            else if (typeChoice == 2) {
+                ui.getCompositionDetails(title, duration, detail, false);
+                collection.addComposition(new InstrumentalWork(title, duration, detail));
+            }
+            else {
+                throw InvalidChoiceException();
+            }
+            break; 
         }
-    try {
-        if (typeChoice == 1) {
-            ui.getCompositionDetails(title, duration, detail, true);
-            collection.addComposition(new Song(title, duration, detail));
+        catch (const InvalidChoiceException& e) {
+            ui.exceptionMessage(e);
         }
-        else if (typeChoice == 2) {
-            ui.getCompositionDetails(title, duration, detail, false);
-            collection.addComposition(new InstrumentalWork(title, duration, detail));
-        }
-        else {
-            throw InvalidChoiceException();
-        }
-    }
-    catch (const InvalidChoiceException& e) {
-        ui.exceptionMessage(e);
-        goto tryAgain;
     }
 }
 void Menu::removeCompositionMenu() {

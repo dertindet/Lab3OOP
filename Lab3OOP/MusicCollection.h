@@ -14,8 +14,6 @@ public:
     ~MusicCollection();
 
     void addComposition(Composition* composition);
-    void saveToFile(const std::string& filename) const;
-    void loadCollectionFromFile(const std::string& filename);
     const std::vector<Composition*>& getCompositions() const;
     bool removeComposition(size_t index);
 };
