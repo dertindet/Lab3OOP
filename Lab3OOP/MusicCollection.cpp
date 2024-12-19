@@ -12,8 +12,8 @@ const std::vector<Composition*>& MusicCollection::getCompositions() const {
 }
 
 MusicCollection::~MusicCollection() {
-    for (Composition* comp : compositions) {
-        delete comp;
+    for (auto composition : compositions) {
+        delete composition;
     }
 }
 
@@ -24,7 +24,6 @@ void MusicCollection::addComposition(Composition* composition) {
 
 bool MusicCollection::removeComposition(size_t index) {
     if (index < compositions.size()) {
-        delete compositions[index];
         compositions.erase(compositions.begin() + index);
         return true; 
     }

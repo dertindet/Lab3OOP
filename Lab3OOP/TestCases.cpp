@@ -14,10 +14,11 @@ public:
         Test2_GetCompositions();
         Test3_SongGetters();
         Test4_InstrumentalWorkGetters();
-        Test5_RemoveComposition_Valid();
         Test6_RemoveComposition_Invalid();
+        Test5_RemoveComposition_Valid();
         Test7_BoundaryIndex();
         Test8_ExceptionHandling();
+        Test9_SongAndInstrumentalInComposition();
     }
 
     static void EqTest(const std::string& test_name, bool condition) {
@@ -32,11 +33,9 @@ public:
     static void Test1_AddComposition() {
         std::string test_name = "Test 1: addComposition";
         MusicCollection collection;
-        Song song("Imagine", 183, "John Lennon");
-        InstrumentalWork instrumental("Moonlight Sonata", 900, "Beethoven");
 
-        collection.addComposition(&song);
-        collection.addComposition(&instrumental);
+        collection.addComposition(new Song("Imagine", 183, "John Lennon"));
+        collection.addComposition(new InstrumentalWork("Moonlight Sonata", 900, "Beethoven"));
 
         EqTest(test_name, collection.getCompositions().size() == 2);
     }
@@ -46,8 +45,9 @@ public:
         MusicCollection collection;
         EqTest(test_name + " (empty)", collection.getCompositions().empty());
 
-        Song song("Imagine", 183, "John Lennon");
-        collection.addComposition(&song);
+        //Song song("Imagine", 183, "John Lennon");
+        collection.addComposition(new Song("Imagine", 183, "John Lennon"));
+        //collection.addComposition(&song);
         EqTest(test_name + " (one element)", collection.getCompositions().size() == 1);
     }
 
@@ -78,7 +78,8 @@ public:
         MusicCollection collection;
         Song song("Imagine", 183, "John Lennon");
 
-        collection.addComposition(&song);
+        //collection.addComposition(&song);
+        collection.addComposition(new Song("Imagine", 183, "John Lennon"));
         bool result = collection.removeComposition(0);
 
         EqTest(test_name, result && collection.getCompositions().empty());
@@ -89,7 +90,8 @@ public:
         MusicCollection collection;
         Song song("Imagine", 183, "John Lennon");
 
-        collection.addComposition(&song);
+        //collection.addComposition(&song);
+        collection.addComposition(new Song("Imagine", 183, "John Lennon"));
         bool result = collection.removeComposition(10);
 
         EqTest(test_name, !result && collection.getCompositions().size() == 1);
@@ -98,16 +100,18 @@ public:
     static void Test7_BoundaryIndex() {
         std::string test_name = "Test 7: Boundary index";
         MusicCollection collection;
-        Song song("Imagine", 183, "John Lennon");
-        InstrumentalWork instrumental("Moonlight Sonata", 900, "Beethoven");
+        //Song song("Imagine", 183, "John Lennon");
+        //InstrumentalWork instrumental("Moonlight Sonata", 900, "Beethoven");
 
-        collection.addComposition(&song);
-        collection.addComposition(&instrumental);
+        //collection.addComposition(&song);
+        //collection.addComposition(&instrumental);
+        collection.addComposition(new Song("Imagine", 183, "John Lennon"));
+        collection.addComposition(new InstrumentalWork("Moonlight Sonata", 900, "Beethoven"));
         bool result = collection.removeComposition(1);
 
         EqTest(test_name, result && collection.getCompositions().size() == 1);
     }
-
+    
     static void Test8_ExceptionHandling() {
         std::string test_name = "Test 8: Exception handling";
         try {
@@ -118,5 +122,22 @@ public:
         catch (const std::out_of_range& e) {
             EqTest(test_name, true);
         }
+    }
+    static void Test9_SongAndInstrumentalInComposition() {
+        std::string test_name = "Test 9: song_and_instrumental_in_collection";
+
+        MusicCollection collection;
+        collection.addComposition(new Song("Imagine", 183, "John Lennon"));
+        collection.addComposition(new InstrumentalWork("Moonlight Sonata", 900, "Beethoven"));
+
+
+        const auto& compositions = collection.getCompositions();
+
+        bool passed = dynamic_cast<Song*>(compositions[0]) != nullptr &&
+            dynamic_cast<InstrumentalWork*>(compositions[1]) != nullptr;
+
+        EqTest(test_name, passed);
+
+ 
     }
 };
